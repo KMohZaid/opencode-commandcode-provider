@@ -208,6 +208,13 @@ test("unknown event types are silently skipped", async () => {
   expect(parts).toHaveLength(0)
 })
 
+test("handles \\r\\n line endings", async () => {
+  const body = streamFromChunks(["data: {\"type\":\"start\"}\r\n\r\n"])
+  const stream = parseStreamEvents(body)
+  const parts = await collectStream(stream)
+  expect(parts).toHaveLength(1)
+})
+
 test("closes stream cleanly at end of data", async () => {
   const body = streamFromChunks(["data: {\"type\":\"start\"}\n\n"])
   const stream = parseStreamEvents(body)

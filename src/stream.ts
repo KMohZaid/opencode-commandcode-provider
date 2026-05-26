@@ -1,4 +1,4 @@
-import type { LanguageModelV3StreamPart, LanguageModelV3Usage, LanguageModelV3FinishReason } from "ai"
+import type { LanguageModelV3StreamPart, LanguageModelV3Usage, LanguageModelV3FinishReason } from "@ai-sdk/provider"
 
 type RawEvent = Record<string, unknown> & { type: string }
 
@@ -109,6 +109,8 @@ function toStreamPart(event: RawEvent): LanguageModelV3StreamPart | null {
   }
 }
 
+// Assumes line-delimited JSON over SSE: one JSON object per `data:` line.
+// Multi-line `data:` fields are not supported — the buffer splits on `\n`.
 export function parseStreamEvents(body: ReadableStream<Uint8Array>): ReadableStream<LanguageModelV3StreamPart> {
   const reader = body.getReader()
   const decoder = new TextDecoder()
@@ -119,6 +121,11 @@ export function parseStreamEvents(body: ReadableStream<Uint8Array>): ReadableStr
       try {
         while (true) {
           const lines = buffer.split("\n")
+          // Strip trailing \r from Windows-style \r\n line endings
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i]
+            if (line !== undefined && line.endsWith("\r")) lines[i] = line.slice(0, -1)
+          }
           buffer = lines.pop() ?? ""
 
           for (const line of lines) {

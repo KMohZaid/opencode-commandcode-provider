@@ -3,7 +3,7 @@ import type {
   LanguageModelV3StreamPart,
   LanguageModelV3CallOptions,
   LanguageModelV3Message,
-} from "ai"
+} from "@ai-sdk/provider"
 
 export type MockFetchCall = {
   url: string

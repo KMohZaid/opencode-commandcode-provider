@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { buildRequest } from "../../src/convert.js"
-import type { LanguageModelV3CallOptions } from "ai"
+import type { LanguageModelV3CallOptions } from "@ai-sdk/provider"
 
 function makeOpts(overrides: Partial<LanguageModelV3CallOptions> = {}): LanguageModelV3CallOptions {
   return {

@@ -6,7 +6,7 @@ import type {
   LanguageModelV3Content,
   LanguageModelV3Usage,
   LanguageModelV3FinishReason,
-} from "ai"
+} from "@ai-sdk/provider"
 import { buildRequest } from "./convert.js"
 import { parseStreamEvents } from "./stream.js"
 

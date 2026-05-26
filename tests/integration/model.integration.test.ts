@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { CommandCodeLanguageModel } from "../../src/model.js"
-import type { LanguageModelV3CallOptions } from "ai"
+import type { LanguageModelV3CallOptions } from "@ai-sdk/provider"
 
 const API_KEY = process.env.COMMANDCODE_API_KEY
 const hasApiKey = !!API_KEY

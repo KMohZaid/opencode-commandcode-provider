@@ -1,14 +1,13 @@
-import type { LanguageModelV3CallOptions } from "ai"
+import type { LanguageModelV3CallOptions } from "@ai-sdk/provider"
 import type {
   LanguageModelV3FunctionTool,
   LanguageModelV3Message,
-  LanguageModelV3Prompt,
   LanguageModelV3TextPart,
   LanguageModelV3ReasoningPart,
   LanguageModelV3ToolCallPart,
   LanguageModelV3ToolResultPart,
   LanguageModelV3ToolResultOutput,
-} from "ai"
+} from "@ai-sdk/provider"
 
 type CCMessage =
   | { role: "user"; content: string | unknown[] }
@@ -34,7 +33,7 @@ type CCTool = {
   input_schema: unknown
 }
 
-export interface CCRequestEnvelope {
+interface CCRequestEnvelope {
   config: {
     workingDir: string
     date: string
@@ -105,7 +104,7 @@ function convertToolResultOutput(output: LanguageModelV3ToolResultOutput): CCToo
     case "error-json":
       return { type: "error-text", value: JSON.stringify(output.value) }
     case "content":
-      return { type: "text", value: output.value.map((v) => ("text" in v ? v.text : JSON.stringify(v))).join("\n") }
+      return { type: "text", value: output.value.map((v: Record<string, unknown>) => ("text" in v ? v.text : JSON.stringify(v))).join("\n") }
     default:
       return { type: "text", value: JSON.stringify(output) }
   }
@@ -199,8 +198,8 @@ export function buildRequest(
 
   return {
     config: {
-      workingDir: process.cwd(),
-      date: new Date().toISOString().split("T")[0],
+      workingDir: process.cwd() ?? "/",
+      date: new Date().toISOString().split("T")[0] ?? "",
       environment: `${process.platform}-${process.arch}`,
       // TODO: populate from opencode project context if available
       structure: [],
