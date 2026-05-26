@@ -82,10 +82,12 @@ function isToolResultPart(p: unknown): p is LanguageModelV3ToolResultPart {
 function extractText(content: unknown): string {
   if (typeof content === "string") return content
   if (Array.isArray(content)) {
-    return content
-      .filter(isTextPart)
-      .map((p) => p.text)
-      .join("\n")
+    const textParts = content.filter(isTextPart) as LanguageModelV3TextPart[]
+    const nonTextParts = content.filter((p) => !isTextPart(p))
+    if (nonTextParts.length > 0 && textParts.length === 0) {
+      console.warn(`Command Code provider: dropped ${nonTextParts.length} non-text part(s) in user message`)
+    }
+    return textParts.map((p) => p.text).join("\n")
   }
   return ""
 }
@@ -200,6 +202,7 @@ export function buildRequest(
       workingDir: process.cwd(),
       date: new Date().toISOString().split("T")[0],
       environment: `${process.platform}-${process.arch}`,
+      // TODO: populate from opencode project context if available
       structure: [],
       isGitRepo: false,
       currentBranch: "",
@@ -208,6 +211,7 @@ export function buildRequest(
       recentCommits: [],
     },
     memory: "",
+    // TODO: determine if taste/memory/permissionMode affect API behavior
     taste: "",
     skills: null,
     permissionMode: "standard",

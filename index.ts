@@ -6,7 +6,6 @@ export interface CommandCodeProviderOptions {
   apiKey?: string
   baseURL?: string
   headers?: Record<string, string>
-  [key: string]: unknown
 }
 
 export function createCommandCode(options: CommandCodeProviderOptions = {}) {

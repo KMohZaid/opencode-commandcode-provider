@@ -276,7 +276,7 @@ function updateGlobalConfig(modelsObj: Record<string, unknown>) {
   if (!config.provider) config.provider = {}
   if (!config.provider.commandcode) {
     config.provider.commandcode = {
-      npm: `file://${PROJECT_ROOT}`,
+      npm: "commandcode-go-opencode-provider",
       name: "Command Code",
       env: ["COMMANDCODE_API_KEY"],
     }

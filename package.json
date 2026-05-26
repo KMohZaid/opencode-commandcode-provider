@@ -37,6 +37,9 @@
     "minimax"
   ],
   "scripts": {
+    "test": "bun test tests/unit/",
+    "test:integration": "bun test tests/integration/",
+    "test:all": "bun test",
     "sync": "bun run scripts/sync-models.ts",
     "sync:global": "bun run scripts/sync-models.ts --update-global"
   },

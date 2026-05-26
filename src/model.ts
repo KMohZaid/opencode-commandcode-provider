@@ -10,8 +10,10 @@ import type {
 import { buildRequest } from "./convert.js"
 import { parseStreamEvents } from "./stream.js"
 
+import pkg from "../package.json" with { type: "json" }
+
 const DEFAULT_BASE_URL = "https://api.commandcode.ai"
-const CC_VERSION = "0.26.20"
+const CC_VERSION = pkg.version
 
 export interface CommandCodeModelOptions {
   apiKey: string
@@ -51,37 +53,49 @@ export class CommandCodeLanguageModel implements LanguageModelV3 {
     const body = buildRequest(this.modelId, options)
     const requestBody = JSON.stringify(body)
 
-    const response = await fetch(`${this.baseURL}/alpha/generate`, {
-      method: "POST",
-      headers: this.buildHeaders(),
-      body: requestBody,
-      signal: options.abortSignal ?? null,
-    })
-
-    if (!response.ok) {
-      const errorBody = await response.text().catch(() => "")
-      let errorMessage = `Command Code API error: ${response.status} ${response.statusText}`
-      try {
-        const parsed = JSON.parse(errorBody)
-        if (parsed.error?.message) errorMessage = parsed.error.message
-        else if (parsed.message) errorMessage = parsed.message
-      } catch {}
-      throw new Error(errorMessage)
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(new Error("Request timed out after 5 minutes")), 300_000)
+    const userSignal = options.abortSignal
+    if (userSignal) {
+      const onAbort = () => controller.abort(userSignal.reason)
+      userSignal.addEventListener("abort", onAbort, { once: true })
     }
 
-    if (!response.body) {
-      throw new Error("Command Code API returned no body")
-    }
+    try {
+      const response = await fetch(`${this.baseURL}/alpha/generate`, {
+        method: "POST",
+        headers: this.buildHeaders(),
+        body: requestBody,
+        signal: controller.signal,
+      })
 
-    const responseHeaders: Record<string, string> = {}
-    response.headers.forEach((v, k) => {
-      responseHeaders[k] = v
-    })
+      if (!response.ok) {
+        const errorBody = await response.text().catch(() => "")
+        let errorMessage = `Command Code API error: ${response.status} ${response.statusText}`
+        try {
+          const parsed = JSON.parse(errorBody)
+          if (parsed.error?.message) errorMessage = parsed.error.message
+          else if (parsed.message) errorMessage = parsed.message
+        } catch {}
+        throw new Error(`${errorMessage} [model=${this.modelId}]`)
+      }
 
-    return {
-      stream: parseStreamEvents(response.body as ReadableStream<Uint8Array>),
-      request: { body: requestBody },
-      response: { headers: responseHeaders },
+      if (!response.body) {
+        throw new Error(`Command Code API returned no body [model=${this.modelId}]`)
+      }
+
+      const responseHeaders: Record<string, string> = {}
+      response.headers.forEach((v, k) => {
+        responseHeaders[k] = v
+      })
+
+      return {
+        stream: parseStreamEvents(response.body as ReadableStream<Uint8Array>),
+        request: { body: requestBody },
+        response: { headers: responseHeaders },
+      }
+    } finally {
+      clearTimeout(timeout)
     }
   }
 
@@ -126,6 +140,7 @@ export class CommandCodeLanguageModel implements LanguageModelV3 {
       }
     } finally {
       reader.releaseLock()
+      stream.cancel()
     }
 
     const text = textParts.join("")
