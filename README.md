@@ -1,4 +1,4 @@
-# opencode-commandcode-provider
+# commandcode-go-opencode-provider
 
 [Command Code](https://commandcode.ai) API provider for [opencode](https://opencode.ai). Use Claude, GPT, Gemini, DeepSeek, Qwen, Kimi, GLM, MiniMax, Step, and other models through a single API key.
 
@@ -31,10 +31,10 @@ You can also configure the provider directly in `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-commandcode-provider/server"],
+  "plugin": ["commandcode-go-opencode-provider/server"],
   "provider": {
     "commandcode": {
-      "npm": "opencode-commandcode-provider",
+      "npm": "commandcode-go-opencode-provider",
       "name": "Command Code",
       "env": ["COMMANDCODE_API_KEY"]
     }
@@ -85,8 +85,8 @@ Full model list is maintained in [`models.json`](./models.json). Run `bun run sy
 ## Development
 
 ```bash
-git clone https://github.com/brent-weatherall/opencode-commandcode-provider.git
-cd opencode-commandcode-provider
+git clone https://github.com/brent-weatherall/commandcode-go-opencode-provider.git
+cd commandcode-go-opencode-provider
 bun install
 ```
 
@@ -94,10 +94,10 @@ For local testing, create `opencode.local.json` (gitignored) with `file://` path
 
 ```json
 {
-  "plugin": ["file:///path/to/opencode-commandcode-provider/plugin.ts"],
+  "plugin": ["file:///path/to/commandcode-go-opencode-provider/plugin.ts"],
   "provider": {
     "commandcode": {
-      "npm": "file:///path/to/opencode-commandcode-provider",
+      "npm": "file:///path/to/commandcode-go-opencode-provider",
       "name": "Command Code (local)",
       "env": ["COMMANDCODE_API_KEY"]
     }

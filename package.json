@@ -1,5 +1,5 @@
 {
-  "name": "opencode-commandcode-provider",
+  "name": "commandcode-go-opencode-provider",
   "version": "0.1.0",
   "description": "Command Code API provider for opencode — use Claude, GPT, Gemini, DeepSeek, Qwen, Kimi, GLM, MiniMax, and Step models via Command Code",
   "type": "module",
