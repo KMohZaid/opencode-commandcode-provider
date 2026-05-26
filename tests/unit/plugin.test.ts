@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeAll } from "bun:test"
+import { expect, test, beforeAll } from "bun:test"
 
 type PluginModule = {
   default: () => Promise<{

@@ -75,8 +75,9 @@ export class CommandCodeLanguageModel implements LanguageModelV3 {
           const parsed = JSON.parse(errorBody)
           if (parsed.error?.message) errorMessage = parsed.error.message
           else if (parsed.message) errorMessage = parsed.message
-        } catch {}
-        throw new Error(`${errorMessage} [model=${this.modelId}]`)
+        } catch {
+          // intentionally silent: error body is not JSON
+        }        throw new Error(`${errorMessage} [model=${this.modelId}]`)
       }
 
       if (!response.body) {

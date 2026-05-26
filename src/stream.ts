@@ -141,6 +141,7 @@ export function parseStreamEvents(body: ReadableStream<Uint8Array>): ReadableStr
             try {
               parsed = JSON.parse(jsonStr)
             } catch {
+              // intentionally silent: skip malformed SSE lines
               continue
             }
 
@@ -164,7 +165,9 @@ export function parseStreamEvents(body: ReadableStream<Uint8Array>): ReadableStr
                     const part = toStreamPart(parsed)
                     if (part) controller.enqueue(part)
                   }
-                } catch {}
+                } catch {
+                  // intentionally silent: skip malformed final buffer
+                }
               }
             }
             controller.close()

@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test"
+import { expect, test } from "bun:test"
 import { parseStreamEvents } from "../../src/stream.js"
-import { sseEvent, sseEvents } from "../helpers/mocks.js"
+import { sseEvent } from "../helpers/mocks.js"
 
 async function collectStream(stream: ReadableStream<unknown>): Promise<unknown[]> {
   const reader = stream.getReader()

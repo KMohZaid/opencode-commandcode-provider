@@ -62,20 +62,24 @@ interface CCRequestEnvelope {
   }
 }
 
+function hasType(p: unknown, type: string): boolean {
+  return typeof p === "object" && p !== null && (p as { type?: string }).type === type
+}
+
 function isTextPart(p: unknown): p is LanguageModelV3TextPart {
-  return typeof p === "object" && p !== null && (p as any).type === "text"
+  return hasType(p, "text")
 }
 
 function isReasoningPart(p: unknown): p is LanguageModelV3ReasoningPart {
-  return typeof p === "object" && p !== null && (p as any).type === "reasoning"
+  return hasType(p, "reasoning")
 }
 
 function isToolCallPart(p: unknown): p is LanguageModelV3ToolCallPart {
-  return typeof p === "object" && p !== null && (p as any).type === "tool-call"
+  return hasType(p, "tool-call")
 }
 
 function isToolResultPart(p: unknown): p is LanguageModelV3ToolResultPart {
-  return typeof p === "object" && p !== null && (p as any).type === "tool-result"
+  return hasType(p, "tool-result")
 }
 
 function extractText(content: unknown): string {
@@ -201,7 +205,7 @@ export function buildRequest(
       workingDir: process.cwd() ?? "/",
       date: new Date().toISOString().split("T")[0] ?? "",
       environment: `${process.platform}-${process.arch}`,
-      // TODO: populate from opencode project context if available
+      // Stub: opencode does not expose project structure context
       structure: [],
       isGitRepo: false,
       currentBranch: "",
@@ -210,7 +214,7 @@ export function buildRequest(
       recentCommits: [],
     },
     memory: "",
-    // TODO: determine if taste/memory/permissionMode affect API behavior
+    // Stub: taste/memory/permissionMode are Command Code CLI features not exposed via provider API
     taste: "",
     skills: null,
     permissionMode: "standard",

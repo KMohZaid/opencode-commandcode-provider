@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach, afterEach } from "bun:test"
+import { expect, test, beforeEach } from "bun:test"
 import { resolveApiKey } from "../../src/auth.js"
 
 beforeEach(() => {

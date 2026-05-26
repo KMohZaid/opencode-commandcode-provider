@@ -1,4 +1,3 @@
-import { mock } from "bun:test"
 import type {
   LanguageModelV3StreamPart,
   LanguageModelV3CallOptions,

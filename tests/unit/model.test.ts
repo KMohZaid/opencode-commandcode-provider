@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeAll, afterAll } from "bun:test"
+import { expect, test, beforeAll, afterAll } from "bun:test"
 import { CommandCodeLanguageModel } from "../../src/model.js"
 import { mockFetchTrack, mockFetchError, mockFetchStream, makeCallOptions } from "../helpers/mocks.js"
 

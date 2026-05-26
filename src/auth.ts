@@ -33,6 +33,7 @@ export function resolveApiKey(options: {
         }
       }
     } catch {
+      // intentionally silent: skip unreadable or malformed auth files
       continue
     }
   }

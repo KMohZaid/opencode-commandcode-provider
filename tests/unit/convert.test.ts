@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { expect, test } from "bun:test"
 import { buildRequest } from "../../src/convert.js"
 import type { LanguageModelV3CallOptions } from "@ai-sdk/provider"
 
