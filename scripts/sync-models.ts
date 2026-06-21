@@ -44,40 +44,60 @@ interface SnEntry {
 
 const FALLBACK_COSTS: Record<string, { input: number; output: number; cache_read?: number; cache_write?: number }> = {
   "deepseek/deepseek-v4-pro": { input: 0.435, output: 0.87, cache_read: 0.003625 },
-  "deepseek/deepseek-v4-flash": { input: 0.14, output: 0.28, cache_read: 0.01 },
+  "deepseek/deepseek-v4-flash": { input: 0.14, output: 0.28, cache_read: 0.0028 },
   "zai-org/GLM-5.1": { input: 1.4, output: 4.4, cache_read: 0.26 },
+  "zai-org/GLM-5.2": { input: 1.4, output: 4.4, cache_read: 0.26 },
   "MiniMaxAI/MiniMax-M2.7": { input: 0.3, output: 1.2, cache_read: 0.06 },
+  "MiniMaxAI/MiniMax-M3": { input: 0.3, output: 1.2, cache_read: 0.06 },
   "Qwen/Qwen3.6-Max-Preview": { input: 1.3, output: 7.8, cache_read: 0.26, cache_write: 1.63 },
   "Qwen/Qwen3.6-Plus": { input: 0.5, output: 3, cache_read: 0.1 },
   "Qwen/Qwen3.7-Max": { input: 1.25, output: 3.75, cache_read: 0.25, cache_write: 1.56 },
+  "Qwen/Qwen3.7-Plus": { input: 0.4, output: 1.6, cache_read: 0.08, cache_write: 0.5 },
   "stepfun/Step-3.5-Flash": { input: 0.1, output: 0.3, cache_read: 0.02 },
+  "stepfun/Step-3.7-Flash": { input: 0.2, output: 1.15, cache_read: 0.04 },
   "google/gemini-3.5-flash": { input: 1.5, output: 9, cache_read: 0.15 },
   "google/gemini-3.1-flash-lite": { input: 0.25, output: 1.5, cache_read: 0.03 },
+  "moonshotai/Kimi-K2.7-Code": { input: 0.95, output: 4.0, cache_read: 0.19 },
+  "moonshotai/Kimi-K2.7-Code-Highspeed": { input: 1.9, output: 8.0, cache_read: 0.38 },
+  "xiaomi/mimo-v2.5-pro": { input: 0.435, output: 0.87, cache_read: 0.0036 },
+  "xiaomi/mimo-v2.5": { input: 0.14, output: 0.28, cache_read: 0.0028 },
+  "nvidia/nemotron-3-ultra-550b-a55b": { input: 0.37, output: 1.08, cache_read: 0.14 },
 }
 
 const FALLBACK_LIMITS: Record<string, { context: number; output: number }> = {
   "claude-haiku-4-5-20251001": { context: 200000, output: 8192 },
   "claude-opus-4-6": { context: 200000, output: 32000 },
-  "claude-opus-4-7": { context: 200000, output: 32000 },
-  "claude-sonnet-4-6": { context: 200000, output: 16000 },
+  "claude-opus-4-7": { context: 1000000, output: 32000 },
+  "claude-opus-4-8": { context: 1000000, output: 32000 },
+  "claude-fable-5": { context: 1000000, output: 32000 },
+  "claude-sonnet-4-6": { context: 1000000, output: 16000 },
   "gpt-5.5": { context: 256000, output: 128000 },
-  "gpt-5.4": { context: 256000, output: 128000 },
-  "gpt-5.3-codex": { context: 256000, output: 128000 },
-  "gpt-5.4-mini": { context: 256000, output: 128000 },
-  "moonshotai/Kimi-K2.6": { context: 262144, output: 131072 },
-  "moonshotai/Kimi-K2.5": { context: 262144, output: 131072 },
+  "gpt-5.4": { context: 400000, output: 128000 },
+  "gpt-5.3-codex": { context: 400000, output: 128000 },
+  "gpt-5.4-mini": { context: 400000, output: 128000 },
+  "moonshotai/Kimi-K2.7-Code": { context: 256000, output: 131072 },
+  "moonshotai/Kimi-K2.7-Code-Highspeed": { context: 262000, output: 131072 },
+  "moonshotai/Kimi-K2.6": { context: 256000, output: 131072 },
+  "moonshotai/Kimi-K2.5": { context: 256000, output: 131072 },
   "zai-org/GLM-5": { context: 200000, output: 131072 },
   "zai-org/GLM-5.1": { context: 200000, output: 131072 },
-  "MiniMaxAI/MiniMax-M2.5": { context: 1000000, output: 131072 },
+  "zai-org/GLM-5.2": { context: 1000000, output: 131072 },
+  "MiniMaxAI/MiniMax-M2.5": { context: 200000, output: 131072 },
   "MiniMaxAI/MiniMax-M2.7": { context: 1000000, output: 131072 },
+  "MiniMaxAI/MiniMax-M3": { context: 1000000, output: 131072 },
+  "xiaomi/mimo-v2.5-pro": { context: 1000000, output: 131072 },
+  "xiaomi/mimo-v2.5": { context: 1000000, output: 131072 },
   "deepseek/deepseek-v4-pro": { context: 1000000, output: 384000 },
   "deepseek/deepseek-v4-flash": { context: 1000000, output: 384000 },
   "Qwen/Qwen3.6-Max-Preview": { context: 1000000, output: 131072 },
   "Qwen/Qwen3.6-Plus": { context: 1000000, output: 131072 },
   "Qwen/Qwen3.7-Max": { context: 1000000, output: 131072 },
+  "Qwen/Qwen3.7-Plus": { context: 1000000, output: 131072 },
   "stepfun/Step-3.5-Flash": { context: 1000000, output: 131072 },
+  "stepfun/Step-3.7-Flash": { context: 256000, output: 131072 },
   "google/gemini-3.5-flash": { context: 1000000, output: 65536 },
   "google/gemini-3.1-flash-lite": { context: 1000000, output: 65536 },
+  "nvidia/nemotron-3-ultra-550b-a55b": { context: 1000000, output: 131072 },
 }
 
 const HARDCODED_EXTRAS: SnEntry[] = [
@@ -169,7 +189,7 @@ function extractWt(source: string): Record<string, string> {
   return evaluateWithContext(normalizeForEval(raw), {})
 }
 
-function extractSpecConstants(source: string): { chatComplete: string; responses: string; qt: string } {
+function extractSpecConstants(source: string): { chatComplete: string; responses: string; qt: string; vtName: string; vtValue: string } {
   const anchorIdx = source.indexOf('SONNET_4_6:{id:"claude-sonnet-4-6"')
   if (anchorIdx < 0) throw new Error("Could not find model catalog anchor")
 
@@ -182,10 +202,24 @@ function extractSpecConstants(source: string): { chatComplete: string; responses
   const qtMatch = before.match(/([A-Za-z_$]+)=Vt\[0\]/)
   const qtVar = qtMatch ? qtMatch[1] : null
 
+  // Vt may be a string literal (e.g. Vt="MiniMaxAI/MiniMax-M3-Free") or an array
+  // Find the variable name and value for Vt so we can inject it into eval context
+  const vtLiteralMatch = before.match(/([A-Za-z_$]+)="([^"]+)",\(Kt=/)
+  const vtName = vtLiteralMatch ? vtLiteralMatch[1] : "Vt"
+  const vtValue = vtLiteralMatch ? vtLiteralMatch[2] : ""
+
+  // Dt may be an alias for the provider enum (e.g. Dt=Nt[0] where Nt=[providerEnum,...])
+  // Find any var assigned as SomeArray[0] near the catalog anchor — it's the provider enum alias
+  const dtMatch = before.match(/([A-Za-z_$]+)=[A-Za-z_$]+\[0\]/)
+  const dtName = dtMatch ? dtMatch[1] : ""
+
   return {
     chatComplete: chatMatch[1],
     responses: respMatch[1],
     qt: qtVar || "",
+    vtName,
+    vtValue,
+    dtName,
   }
 }
 
@@ -200,6 +234,8 @@ function extractModelCatalog(
   ctx[spec.chatComplete] = "chatComplete"
   ctx[spec.responses] = "responses"
   if (spec.qt) ctx[spec.qt] = wt.VERCEL_AI_GATEWAY
+  if (spec.vtName && spec.vtValue) ctx[spec.vtName] = spec.vtValue
+  if (spec.dtName) ctx[spec.dtName] = wt
   return evaluateWithContext(normalizeForEval(raw), ctx)
 }
 
